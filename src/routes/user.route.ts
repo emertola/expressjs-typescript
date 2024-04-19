@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { createUserHandler, getAllUsers, getUserById } from '../handlers';
 import { checkSchema } from 'express-validator';
-import { createUserValidationSchema } from '../utils';
+import { createUserValidationSchema, getUsersListSchema } from '../utils';
 
 const router = Router();
 
-router.get('/', getAllUsers);
+router.get('/', checkSchema(getUsersListSchema, ['query']), getAllUsers);
 
 router.get('/:id', getUserById);
 

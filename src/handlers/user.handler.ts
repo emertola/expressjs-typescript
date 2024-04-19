@@ -9,13 +9,44 @@ import {
 } from 'express-validator';
 import { hashPassword } from '../utils';
 import { User as UserSchema } from '../mongoose/schemas/user.schema';
+import session from 'express-session';
 
-export const getAllUsers = async (request: Request, response: Response) => {
-  if (!request.user) {
-    return response.sendStatus(401);
-  } else {
-    return await UserSchema.find().then((users) => response.send(users));
-  }
+export const getAllUsers = (request: Request, response: Response) => {
+  console.log('sessionstore', request.sessionStore);
+  console.log('session', request.session);
+  request.sessionStore.get(
+    request.session.id,
+    (err: any, sessionData?: session.SessionData | null | undefined) => {
+      if (err) {
+        console.log('error', err);
+        throw err;
+      }
+      console.log('session data', sessionData);
+    }
+  );
+  // const result = validationResult(request);
+
+  // if (!result.isEmpty()) {
+  //   return response.status(400).send({
+  //     data: result.array(),
+  //     message: 'Error creating the user!',
+  //   });
+  // }
+
+  // const {
+  //   query: { filter, value },
+  // } = result;
+
+  // console.log('filter', filter);
+  // console.log('value', value);
+  // if (filter && value) {
+  // }
+
+  // if (!request.user) {
+  //   return response.sendStatus(401);
+  // } else {
+  //   return await UserSchema.find().then((users) => response.send(users));
+  // }
 };
 
 export const getUserById = (request: Request, response: Response) => {
