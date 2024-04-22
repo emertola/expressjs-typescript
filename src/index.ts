@@ -4,7 +4,8 @@ import session from 'express-session';
 import passport from 'passport';
 import routes from './routes';
 import mongoose from 'mongoose';
-import './strategies/local-strategy';
+// import './strategies/local-strategy';
+import './strategies/google-oauth2.strategy';
 
 const app = express();
 const PORT = 3001;

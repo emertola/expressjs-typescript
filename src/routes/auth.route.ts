@@ -28,4 +28,19 @@ router.get('/status', (req: Request, res: Response) => {
   return req?.user ? res.send(req.user) : res.sendStatus(401);
 });
 
+router.get(
+  '/google/login',
+  passport.authenticate('google', { scope: ['profile'] })
+);
+
+router.get(
+  '/google/redirect',
+  passport.authenticate('google'),
+  (request: Request, response: Response) => {
+    // console.log('request', request);
+    console.log('response', response);
+    response.sendStatus(200);
+  }
+);
+
 export default router;
