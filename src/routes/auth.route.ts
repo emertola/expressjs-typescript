@@ -30,16 +30,16 @@ router.get('/status', (req: Request, res: Response) => {
 
 router.get(
   '/google/login',
-  passport.authenticate('google', { scope: ['profile'] })
+  passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 
 router.get(
   '/google/redirect',
   passport.authenticate('google'),
   (request: Request, response: Response) => {
-    // console.log('request', request);
-    console.log('response', response);
-    response.sendStatus(200);
+    console.log('request', request.user);
+    // console.log('response', response);
+    response.status(200).send('Login Success');
   }
 );
 

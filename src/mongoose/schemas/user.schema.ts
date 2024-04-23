@@ -1,16 +1,26 @@
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema({
-  username: {
+  // username: {
+  //   type: mongoose.Schema.Types.String,
+  //   required: true,
+  //   unique: true,
+  // },
+  displayName: mongoose.Schema.Types.String,
+  // password: {
+  //   type: mongoose.Schema.Types.String,
+  //   required: true,
+  // },
+  googleId: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+  },
+  email: {
     type: mongoose.Schema.Types.String,
     required: true,
     unique: true,
   },
-  displayName: mongoose.Schema.Types.String,
-  password: {
-    type: mongoose.Schema.Types.String,
-    required: true,
-  },
+  roles: Array<string>,
 });
 
 export const User = mongoose.model('User', UserSchema);

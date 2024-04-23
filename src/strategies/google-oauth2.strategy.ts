@@ -1,6 +1,6 @@
 import passport from 'passport';
-import { Strategy, VerifyCallback } from 'passport-google-oauth20';
-import { User } from '../types';
+import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { User } from '../mongoose/schemas/user.schema';
 
 passport.use(
   new Strategy(
@@ -10,8 +10,31 @@ passport.use(
       clientSecret: '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',
       callbackURL: 'http://localhost:3001/api/v1/auth/google/redirect',
     },
-    (accessToken, refreshToken, profile, done) => {
-      done(null, profile);
+    async (
+      accessToken: string,
+      refreshToken: string,
+      profile: Profile,
+      done: (error: any, user?: any) => void
+    ) => {
+      try {
+        const existingUser = await User.findOne({ googleId: profile.id });
+
+        if (existingUser) {
+          return done(null, existingUser);
+        } else {
+          const newUser = new User({
+            googleId: profile.id,
+            email: profile.emails?.[0].value,
+            displayName: profile.displayName,
+            roles: ['PERM_VIEW_PROJECTS'],
+          });
+
+          await newUser.save();
+          return done(null, newUser);
+        }
+      } catch (error: any) {
+        return done(new Error(error));
+      }
     }
   )
 );
